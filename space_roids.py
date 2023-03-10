@@ -104,7 +104,7 @@ class Bullet:
 pygame.init()
 
 # Screen size reduced from 800 x 800 (less playable) for laptop development
-screen_width = 600
+screen_width = 600  # pixels
 screen_height = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("'Roids")
