@@ -9,7 +9,7 @@ from pygame.mixer import Sound
 asteroid_images = ["images/asteroid1.png", "images/asteroid2.png", "images/asteroid3.png"]
 
 # Global functions
-def blit_rotated(position, image, forward, screen): 
+def blit_rotated(position, image, forward, screen):
     angle = forward.angle_to(Vector2(0, -1))
     rotated_surface = rotozoom(image, angle, 1.0)
     rotated_surface_size = Vector2(rotated_surface.get_size())
@@ -17,7 +17,7 @@ def blit_rotated(position, image, forward, screen):
 
     screen.blit(rotated_surface, blit_position)
 
-def wrap_position(position, screen):  
+def wrap_position(position, screen):
     x, y = position
     w, h = screen.get_size()
     return Vector2(x % w, y % h)
@@ -33,7 +33,7 @@ class Ship:
         self.bullets = []
         self.can_shoot = 0
 
-    def update(self):      
+    def update(self):
         is_key_pressed = pygame.key.get_pressed()
 
         if is_key_pressed[pygame.K_UP]:
@@ -57,7 +57,7 @@ class Ship:
         else:
             self.can_shoot = 0  # clamp it at 0
 
-    def draw(self, screen):     
+    def draw(self, screen):
         self.position = wrap_position(self.position, screen)
         blit_rotated(self.position, self.image, self.forward, screen)
 
@@ -82,7 +82,7 @@ class Asteroid:
         #     or self.position.y > out_of_bounds[3]:
         #     self.velocity.y *= -1
 
-    def draw(self, screen):      
+    def draw(self, screen):
         self.position = wrap_position(self.position, screen)
         blit_rotated(self.position, self.image, self.velocity, screen)
 
@@ -98,10 +98,10 @@ class Bullet:
         self.position = position
         self.velocity = velocity
 
-    def update(self):   
+    def update(self):
         self.position += self.velocity
 
-    def draw(self, screen):    
+    def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), [self.position.x, self.position.y, 5, 5])
 
 
