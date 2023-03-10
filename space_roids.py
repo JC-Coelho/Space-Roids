@@ -119,7 +119,7 @@ num_asteroids = random.randint(4, 6)    # From Atari '79 original 4-6 asteroids 
 
 out_of_bounds = [-150, -150, 750, 750]
 # Unblock line below if running in 800 x 800 resolution
-# out_of_bounds = [-150, -150, 850, 850]
+# out_of_bounds = [-150, -150, 950, 950]
 
 for i in range(num_asteroids):
 
