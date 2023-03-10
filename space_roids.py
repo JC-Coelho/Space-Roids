@@ -116,7 +116,10 @@ game_over = False
 ship = Ship((screen.get_width() // 2, screen.get_height() // 2))
 asteroids = []
 num_asteroids = random.randint(4, 6)    # From Atari '79 original 4-6 asteroids at start
+
 out_of_bounds = [-150, -150, 750, 750]
+# Unblock line below if running in 800 x 800 resolution
+# out_of_bounds = [-150, -150, 850, 850]
 
 for i in range(num_asteroids):
 
