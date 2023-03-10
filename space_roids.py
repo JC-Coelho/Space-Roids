@@ -5,7 +5,6 @@ from pygame import Vector2
 from pygame.transform import rotozoom
 from pygame.mixer import Sound
 
-global screen
 # Load asteroid images
 asteroid_images = ["images/asteroid1.png", "images/asteroid2.png", "images/asteroid3.png"]
 
