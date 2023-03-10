@@ -104,6 +104,7 @@ class Bullet:
     def draw(self, screen):
         pygame.draw.rect(screen, (255, 255, 255), [self.position.x, self.position.y, 5, 5])
 
+
 # Initialise pygame
 pygame.init()
 
