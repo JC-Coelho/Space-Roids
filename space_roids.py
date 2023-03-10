@@ -64,12 +64,12 @@ class Ship:
 
 class Asteroid:
     def __init__(self, position, size):
-        self.explode = Sound("sounds/explode.mp3")        
+        self.explode = Sound("sounds/explode.mp3")
+        self.image = pygame.image.load(asteroid_images[size])               
         self.position = Vector2(position)
+        self.size = size        
         self.velocity = Vector2(random.randint(-3, 3), random.randint(-3, 3))
-        self.image = pygame.image.load(asteroid_images[size])
         self.radius = self.image.get_width() // 2   # Use radius for collisions
-        self.size = size
 
     def update(self):
         self.position += self.velocity
