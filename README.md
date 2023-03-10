@@ -1,5 +1,5 @@
 # 🚀 Space 'Roids! #
-**Spoiler Alert !!!** This project contains the source code for the game **'Roids** from the **Udemy** online course [**Exploring Game Mechanics with Python**](https://www.udemy.com/course/exploring-game-mechanics-with-python-and-pygame/). It's a really amazing first dive into Pygame and this is one of the fun remakes featured. If you're a developer this game runs better with the intended ```800 x 800 resolution```.
+**Spoiler Alert !!!** This project contains the source code for the game **'Roids** from the **Udemy** online course [**Exploring Game Mechanics with Python**](https://www.udemy.com/course/exploring-game-mechanics-with-python-and-pygame/). It's a really amazing first dive into Pygame and this is one of the fun remakes featured. If you're a developer this game runs better with the intended ```800 x 800``` resolution.
 
 > I recommend updating both vars ```screen_width``` and ```screen_height``` to 800  before playing, even though it is not a requirement. You can obviously also tweak it to your liking.
 
