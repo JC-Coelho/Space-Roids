@@ -1,3 +1,4 @@
+# pylint: disable=C W0621
 import sys
 import random
 import pygame
@@ -6,7 +7,9 @@ from pygame.transform import rotozoom
 from pygame.mixer import Sound
 
 # Load asteroid images
-asteroid_images = ["images/asteroid1.png", "images/asteroid2.png", "images/asteroid3.png"]
+asteroid_images = ["images/asteroid1.png",
+                   "images/asteroid2.png", "images/asteroid3.png"]
+
 
 # Global functions
 def blit_rotated(position, image, forward, screen):
@@ -17,12 +20,35 @@ def blit_rotated(position, image, forward, screen):
 
     screen.blit(rotated_surface, blit_position)
 
+
 def wrap_position(position, screen):
     x, y = position
     w, h = screen.get_size()
     return Vector2(x % w, y % h)
 
+
 # Classes
+class Surface:
+    # Screen manager for different resolutions
+    out_of_bounds = []
+
+    def __init__(self, screen):
+        self.font = pygame.font.Font("fonts/Alien.ttf", 60)
+        self.out_of_bounds = [-150, -150,
+                              screen.get_width() + 150, screen.get_height() + 150]
+
+    def update_coords(self, screen):
+        self.out_of_bounds = [-150, -150,
+                              screen.get_width() + 150, screen.get_height() + 150]
+
+    # Blit message to screen
+    def drawText(self, text, screen):
+        text = self.font.render(text, True, (255, 255, 255))
+        text_position = ((screen.get_width() - text.get_width()) // 2,
+                         (screen.get_height() - text.get_height()) // 2)
+        screen.blit(text, text_position)
+
+
 class Ship:
     def __init__(self, position):
         self.shoot = Sound("sounds/shoot.wav")
@@ -38,14 +64,16 @@ class Ship:
 
         if is_key_pressed[pygame.K_UP]:
             self.position += self.forward
-            self.drift = (self.drift + self.forward) / 1.5    # normalized vector addition
+            self.drift = (self.drift + self.forward) / \
+                1.5    # normalized vector addition
         if is_key_pressed[pygame.K_LEFT]:
             self.forward = self.forward.rotate(-2)
         if is_key_pressed[pygame.K_RIGHT]:
             self.forward = self.forward.rotate(2)
         if is_key_pressed[pygame.K_SPACE] and self.can_shoot == 0:
             self.shoot.play()
-            self.bullets.append(Bullet(Vector2(self.position), self.forward * 10))
+            self.bullets.append(
+                Bullet(Vector2(self.position), self.forward * 10))
             self.can_shoot = 500
 
         # Add drift to ship movement
@@ -102,38 +130,42 @@ class Bullet:
         self.position += self.velocity
 
     def draw(self, screen):
-        pygame.draw.rect(screen, (255, 255, 255), [self.position.x, self.position.y, 5, 5])
+        pygame.draw.rect(screen, (255, 255, 255), [
+                         self.position.x, self.position.y, 5, 5])
 
 
 # Initialise pygame
 pygame.init()
 
-# Screen size reduced from 800 x 800 (less playable) for laptop development
-SCREEN_WIDTH = 600  # pixels
-SCREEN_HEIGHT = 600
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+# Set screen size here (800 x 800)
+screen_width = 600  # pixels
+screen_height = 600
+
+screen = pygame.display.set_mode(
+    (screen_width, screen_height), pygame.RESIZABLE)
 pygame.display.set_caption("'Roids")
 
 background = pygame.image.load("images/space.png")
-background = pygame.transform.scale(background, (SCREEN_WIDTH, SCREEN_HEIGHT))
+background = pygame.transform.scale(background, (screen_width, screen_height))
 
-game_over = False
+# Instantiate screen manager
+surface = Surface(screen)
+# out_of_bounds = [-150, -150, screen.get_width() + 150, screen.get_height() + 150]
+
+# Create game elements
 ship = Ship((screen.get_width() // 2, screen.get_height() // 2))
 asteroids = []
-num_asteroids = random.randint(4, 6)    # From Atari '79 original 4-6 asteroids at start
-
-out_of_bounds = [-150, -150, 750, 750]
-# Unblock line below if running in 800 x 800 resolution
-# out_of_bounds = [-150, -150, 950, 950]
+# From Atari '79 original 4-6 asteroids at start
+num_asteroids = random.randint(4, 6)
 
 for i in range(num_asteroids):
 
     # Create asteroids towards edges of the screen using vectors (-> 80%)
-    posx, posy = ( random.randint(0, screen.get_width()), \
-        random.randint(0, screen.get_height()))
+    posx, posy = (random.randint(0, screen.get_width()),
+                  random.randint(0, screen.get_height()))
     asteroid_position = (posx, posy)
-    asteroid_direction_away_from_screen_center = ( (screen.get_width() // 2 - posx) * 0.8, \
-        (screen.get_height() // 2 - posy) * 0.8 )
+    asteroid_direction_away_from_screen_center = ((screen.get_width() // 2 - posx) * 0.8,
+                                                  (screen.get_height() // 2 - posy) * 0.8)
     asteroid_position += asteroid_direction_away_from_screen_center
     asteroids.append(Asteroid((asteroid_position[0], asteroid_position[1]), 0))
 
@@ -142,16 +174,7 @@ for i in range(num_asteroids):
     #     ( random.randint(0, screen.get_width()), random.randint(0, screen.get_height()) ) \
     # ))
 
-font = pygame.font.Font("fonts/Alien.ttf", 60)
-text_loser = font.render("You Lost!", True, (255, 255, 255))
-text_loser_position = ( (screen.get_width() - text_loser.get_width()) // 2, \
-    (screen.get_height() - text_loser.get_height()) // 2 )
-
-font2 = pygame.font.Font("fonts/Alien.ttf", 60)
-text_winner = font2.render("You Won!", True, (255, 255, 255))
-text_winner_position = ( (screen.get_width() - text_winner.get_width()) // 2, \
-    (screen.get_height() - text_winner.get_height()) // 2)
-
+game_over = False
 clock = pygame.time.Clock()
 
 # Main loop
@@ -160,25 +183,35 @@ while not game_over:
 
     # Event loop
     for event in pygame.event.get():
+
         if event.type == pygame.QUIT:
             game_over = True
+
+        elif event.type == pygame.VIDEORESIZE:
+
+            surface.update_coords(screen)
+            background = pygame.transform.scale(
+                background, (screen.get_width(), screen.get_height()))
+            pygame.display.update()
 
     screen.blit(background, (0, 0))
 
     # Game over
     if ship is None:
-        screen.blit(text_loser, text_loser_position)
+        surface.drawText("You Lost!", screen)
         pygame.display.update()
         continue
 
     # Player win
     if len(asteroids) == 0:
-        screen.blit(text_winner, text_winner_position)
+        surface.drawText("You Won!", screen)
         pygame.display.update()
         continue
 
     # Check screen bounds for asteroids and/or bullets
-    # pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(out_of_bounds))
+    # pygame.draw.rect(screen, (255, 0, 0),
+    #     pygame.Rect( bounds.out_of_bounds[0],bounds.out_of_bounds[1], \
+    #     bounds.out_of_bounds[2], bounds.out_of_bounds[3] ))
 
     ship.update()
     ship.draw(screen)
@@ -204,10 +237,10 @@ while not game_over:
         b.draw(screen)
 
         # Remove offscreen bullets
-        if b.position.x < out_of_bounds[0] \
-            or b.position.x > out_of_bounds[2] \
-            or b.position.y < out_of_bounds[1] \
-            or b.position.y > out_of_bounds[3]:
+        if b.position.x < surface.out_of_bounds[0] \
+            or b.position.x > surface.out_of_bounds[2] \
+            or b.position.y < surface.out_of_bounds[1] \
+                or b.position.y > surface.out_of_bounds[3]:
             if b not in deadbullets:
                 deadbullets.append(b)
 
@@ -225,8 +258,8 @@ while not game_over:
     # Asteroids
     for a in deadasteroids:
         if a.size < 2:
-            asteroids.append(Asteroid( a.position, a.size + 1))
-            asteroids.append(Asteroid( a.position, a.size + 1))
+            asteroids.append(Asteroid(a.position, a.size + 1))
+            asteroids.append(Asteroid(a.position, a.size + 1))
 
         asteroids.remove(a)
 
