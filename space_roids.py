@@ -66,6 +66,10 @@ class Ship:
             self.position += self.forward
             self.drift = (self.drift + self.forward) / \
                 1.5    # normalized vector addition
+                
+        if is_key_pressed[pygame.K_DOWN]:
+            self.drift = (0, 0)
+
         if is_key_pressed[pygame.K_LEFT]:
             self.forward = self.forward.rotate(-2)
         if is_key_pressed[pygame.K_RIGHT]:
